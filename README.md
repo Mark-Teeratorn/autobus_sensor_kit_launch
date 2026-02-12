@@ -1,4 +1,4 @@
-# sample_sensor_kit_launch
+# autobus_sensor_kit_launch
 
 🗃️ This is an archived repository.
 
