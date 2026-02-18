@@ -1,0 +1,14 @@
+/**:
+  ros__parameters:
+    distance_ratio: 2.0  # Very high to be extremely tolerant
+    object_length_threshold: 5.0  # Very high to allow all objects
+    max_rings_num: 128
+    max_points_num_per_ring: 4000
+    publish_outlier_pointcloud: false
+    min_azimuth_deg: 0.0
+    max_azimuth_deg: 360.0
+    max_distance: 130.0  # Matches VLP-16 range
+    vertical_bins: 128
+    horizontal_bins: 36
+    noise_threshold: 100  # Very high to disable noise filtering
+    processing_time_threshold_sec: 0.01

@@ -7,7 +7,7 @@
   <arg name="sensor_frame" default="velodyne"/>
   <arg name="return_mode" default="SingleStrongest"/>
   <arg name="sensor_ip" default="192.168.1.201"/>
-  <arg name="host_ip" default="255.255.255.255"/>
+  <arg name="host_ip" default="192.168.1.100"/>
   <arg name="data_port" default="2368"/>
   <arg name="scan_phase" default="0.0"/>
   <arg name="cloud_min_angle" default="0"/>
@@ -16,7 +16,7 @@
   <arg name="container_name" default="velodyne_node_container"/>
   <arg name="udp_only" default="false"/>
 
-  <include file="$(find-pkg-share common_sensor_launch)/launch/nebula_node_container.launch.py">
+  <include file="$(find-pkg-share autobus_common_sensor_launch)/launch/nebula_node_container.launch.py">
     <arg name="launch_driver" value="$(var launch_driver)"/>
     <arg name="sensor_model" value="$(var model)"/>
     <arg name="return_mode" value="$(var return_mode)"/>

@@ -73,16 +73,32 @@ def launch_setup(context, *args, **kwargs):
     # Model and make
     sensor_model = LaunchConfiguration("sensor_model").perform(context)
     sensor_make, sensor_extension = get_lidar_make(sensor_model)
-    nebula_decoders_share_dir = get_package_share_directory("nebula_decoders")
+    if sensor_make == "Velodyne":
+        nebula_decoders_share_dir = get_package_share_directory("nebula_velodyne_decoders")
+    elif sensor_make == "Hesai":
+        nebula_decoders_share_dir = get_package_share_directory("nebula_hesai_decoders")
+    else:
+        nebula_decoders_share_dir = get_package_share_directory("nebula_decoders")
+
+    # Common sensor launch package directory
+    common_sensor_share_dir = get_package_share_directory("autobus_common_sensor_launch")
 
     # Calibration file
     if sensor_extension is not None:  # Velodyne and Hesai
-        sensor_calib_fp = os.path.join(
-            nebula_decoders_share_dir,
-            "calibration",
-            sensor_make.lower(),
-            sensor_model + sensor_extension,
-        )
+        if sensor_make == "Velodyne":
+            sensor_calib_fp = os.path.join(
+                nebula_decoders_share_dir,
+                "calibration",
+                sensor_model + sensor_extension,
+            )
+        else:
+            sensor_calib_fp = os.path.join(
+                nebula_decoders_share_dir,
+                "calibration",
+                sensor_make.lower(),
+                sensor_model + sensor_extension,
+            )
+
         assert os.path.exists(
             sensor_calib_fp
         ), "Sensor calib file under calibration/ was not found: {}".format(sensor_calib_fp)
@@ -137,6 +153,8 @@ def launch_setup(context, *args, **kwargs):
                         "setup_sensor",
                         "udp_only",
                     ),
+                    "diag_span": 1000,
+                    "advanced_diagnostics": False,
                 },
             ],
             remappings=[
@@ -152,6 +170,14 @@ def launch_setup(context, *args, **kwargs):
 
     cropbox_parameters = create_parameter_dict("input_frame", "output_frame")
     cropbox_parameters["negative"] = True
+
+    # Load crop box filter parameters
+    crop_box_param_path = os.path.join(
+        common_sensor_share_dir, "config", "crop_box_filter_node.param.yaml"
+    )
+    with open(crop_box_param_path, "r") as f:
+        crop_box_params = yaml.safe_load(f)["/**"]["ros__parameters"]
+    cropbox_parameters.update(crop_box_params)
 
     vehicle_info = get_vehicle_info(context)
     cropbox_parameters["min_x"] = vehicle_info["min_longitudinal_offset"]
@@ -254,7 +280,7 @@ def generate_launch_description():
             DeclareLaunchArgument(name, default_value=default_value, description=description)
         )
 
-    common_sensor_share_dir = get_package_share_directory("common_sensor_launch")
+    common_sensor_share_dir = get_package_share_directory("autobus_common_sensor_launch")
 
     add_launch_arg("sensor_model", description="sensor model name")
     add_launch_arg("config_file", "", description="sensor configuration file")
