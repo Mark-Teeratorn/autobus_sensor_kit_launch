@@ -15,10 +15,12 @@
   <arg name="vehicle_mirror_param_file"/>
   <arg name="container_name" default="velodyne_node_container"/>
   <arg name="udp_only" default="false"/>
+  <arg name="setup_sensor" default="true"/>
 
   <include file="$(find-pkg-share autobus_common_sensor_launch)/launch/nebula_node_container.launch.py">
     <arg name="launch_driver" value="$(var launch_driver)"/>
     <arg name="sensor_model" value="$(var model)"/>
+    <arg name="setup_sensor" value="$(var setup_sensor)"/>
     <arg name="return_mode" value="$(var return_mode)"/>
     <arg name="max_range" value="$(var max_range)"/>
     <arg name="min_range" value="$(var min_range)"/>
