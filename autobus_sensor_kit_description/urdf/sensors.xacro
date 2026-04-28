@@ -20,7 +20,7 @@
   <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro"/>
   
   <!-- Top Lidar -->
-  <xacro:VLP-16 parent="sensor_kit_base_link" name="velodyne_top" topic="/points_raw" hz="10" samples="220" gpu="$(arg gpu)">
+  <xacro:VLP-16 parent="sensor_kit_base_link" name="velodyne_top" topic="/sensing/lidar/top/pointcloud_raw" hz="10" samples="220" gpu="$(arg gpu)">
     <origin
       xyz="${sensor_kit_calibration['sensor_kit_base_link']['velodyne_top_base_link']['x']}
            ${sensor_kit_calibration['sensor_kit_base_link']['velodyne_top_base_link']['y']}
@@ -32,7 +32,7 @@
   </xacro:VLP-16>
 
   <!-- Rear Lidar -->
-  <xacro:VLP-16 parent="sensor_kit_base_link" name="velodyne_rear" topic="/points_raw" hz="10" samples="220" gpu="$(arg gpu)">
+  <xacro:VLP-16 parent="sensor_kit_base_link" name="velodyne_rear" topic="/sensing/lidar/rear/pointcloud_raw" hz="10" samples="220" gpu="$(arg gpu)">
     <origin
       xyz="${sensor_kit_calibration['sensor_kit_base_link']['velodyne_rear_base_link']['x']}
            ${sensor_kit_calibration['sensor_kit_base_link']['velodyne_rear_base_link']['y']}
@@ -42,4 +42,6 @@
            ${sensor_kit_calibration['sensor_kit_base_link']['velodyne_rear_base_link']['yaw']}"
     />
   </xacro:VLP-16>
+
+
 </robot>

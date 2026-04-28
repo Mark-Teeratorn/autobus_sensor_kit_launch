@@ -1,11 +1,13 @@
 <launch>
   <arg name="launch_driver" default="true"/>
-  <arg name="fcu_url" default="/dev/ttyPX4:57600"/>
 
   <group>
     <push-ros-namespace namespace="imu"/>
 
-    <arg name="imu_raw_name" default="/mavros_node/mavros_node/data_raw"/>
+    <!-- IMU data comes from the shared GNSS mavros instance (gnss.launch.xml).
+         Do NOT launch a second mavros_node here — that causes serial port conflicts
+         and duplicate nodes fighting over FCU communication. -->
+    <arg name="imu_raw_name" default="/sensing/gnss/mavros_node/data_raw"/>
     <arg name="imu_corrector_param_file" default="$(find-pkg-share individual_params)/config/$(var vehicle_id)/autobus_sensor_kit/imu_corrector.param.yaml"/>
     <include file="$(find-pkg-share autoware_imu_corrector)/launch/imu_corrector.launch.xml">
       <arg name="input_topic" value="$(var imu_raw_name)"/>
@@ -20,9 +22,8 @@
     </include>
   </group>
 
-  <!-- MAVROS node -->
-  <node pkg="mavros" exec="mavros_node" name="mavros_node" if="$(var launch_driver)">
-    <param name="fcu_url" value="$(var fcu_url)"/>
-  </node>
+  <!-- NOTE: mavros_node is intentionally NOT launched here.
+       A single mavros instance is shared between IMU and GNSS,
+       launched by gnss.launch.xml at /sensing/gnss/mavros_node -->
 
 </launch>

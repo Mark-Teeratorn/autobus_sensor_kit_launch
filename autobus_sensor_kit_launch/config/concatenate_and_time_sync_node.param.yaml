@@ -13,7 +13,7 @@
     input_twist_topic_type: twist
     input_topics: [
                     "/sensing/lidar/top/pointcloud_before_sync",
-                    "/sensing/lidar/rear/pointcloud_before_sync",
+                    "/sensing/lidar/rear/pointcloud_before_sync"
                 ]
     output_frame: base_link
     matching_strategy:

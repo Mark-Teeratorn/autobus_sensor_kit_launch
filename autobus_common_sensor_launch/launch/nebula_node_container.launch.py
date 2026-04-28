@@ -18,11 +18,8 @@ from ament_index_python.packages import get_package_share_directory
 import launch
 from launch.actions import DeclareLaunchArgument
 from launch.actions import OpaqueFunction
-from launch.actions import SetLaunchConfiguration
-from launch.conditions import IfCondition
-from launch.conditions import UnlessCondition
 from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import ComposableNodeContainer
+from launch_ros.actions import LoadComposableNodes
 from launch_ros.descriptions import ComposableNode
 from launch_ros.parameter_descriptions import ParameterFile
 import yaml
@@ -258,17 +255,13 @@ def launch_setup(context, *args, **kwargs):
         )
     )
 
-    # set container to run all required components in the same process
-    container = ComposableNodeContainer(
-        name=LaunchConfiguration("container_name"),
-        namespace="pointcloud_preprocessor",
-        package="rclcpp_components",
-        executable=LaunchConfiguration("container_executable"),
+    # load all required components into the shared external container
+    loader = LoadComposableNodes(
         composable_node_descriptions=nodes,
-        output="both",
+        target_container=LaunchConfiguration("container_name"),
     )
 
-    return [container]
+    return [loader]
 
 
 def generate_launch_description():
@@ -304,7 +297,7 @@ def generate_launch_description():
     add_launch_arg("output_frame", LaunchConfiguration("base_frame"), "use for cropbox")
     add_launch_arg("use_multithread", "False", "use multithread")
     add_launch_arg("use_intra_process", "False", "use ROS 2 component container communication")
-    add_launch_arg("lidar_container_name", "nebula_node_container")
+    add_launch_arg("container_name", "pointcloud_container", "name of the shared container to load nodes into")
     add_launch_arg("output_as_sensor_frame", "True", "output final pointcloud in sensor frame")
     add_launch_arg(
         "vehicle_mirror_param_file", description="path to the file of vehicle mirror position yaml"
@@ -329,20 +322,7 @@ def generate_launch_description():
     )
     add_launch_arg("udp_only", "False", "use UDP only")
 
-    set_container_executable = SetLaunchConfiguration(
-        "container_executable",
-        "component_container",
-        condition=UnlessCondition(LaunchConfiguration("use_multithread")),
-    )
-
-    set_container_mt_executable = SetLaunchConfiguration(
-        "container_executable",
-        "component_container_mt",
-        condition=IfCondition(LaunchConfiguration("use_multithread")),
-    )
-
     return launch.LaunchDescription(
         launch_arguments
-        + [set_container_executable, set_container_mt_executable]
         + [OpaqueFunction(function=launch_setup)]
     )

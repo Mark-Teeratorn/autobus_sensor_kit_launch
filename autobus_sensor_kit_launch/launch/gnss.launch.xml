@@ -13,7 +13,7 @@
 
     <!-- Ublox Driver -->
     <group if="$(eval &quot;'$(var gnss_receiver)'=='ublox'&quot;)">
-      <node pkg="ublox_gps" name="ublox" exec="ublox_gps_node" if="$(var launch_driver)" respawn="true" respawn_delay="1.0">
+      <node pkg="ublox_gps" name="ublox" exec="ublox_gps_node" if="$(var launch_driver)" respawn="false">
         <remap from="~/fix" to="~/nav_sat_fix"/>
         <param from="$(find-pkg-share ublox_gps)/c94_f9p_rover.yaml"/>
       </node>
@@ -26,7 +26,7 @@
 
     <!-- MAVROS GNSS Driver -->
     <group if="$(eval &quot;'$(var launch_driver)' and '$(var gnss_receiver)'=='mavros'&quot;)">
-      <node pkg="mavros" name="mavros_node" exec="mavros_node" respawn="true" respawn_delay="1.0">
+      <node pkg="mavros" name="mavros_node" exec="mavros_node" respawn="true">
         <param name="fcu_url" value="/dev/ttyACM0:57600"/>
       </node>
     </group>
@@ -41,6 +41,7 @@
       <arg name="output_topic_gnss_fixed" value="fixed"/>
 
       <arg name="use_gnss_ins_orientation" value="true"/>
+      <!-- <arg name="publish_tf" value="false"/> -->
     </include>
   </group>
 </launch>

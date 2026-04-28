@@ -13,7 +13,7 @@ class ImuQosBridge(Node):
     def __init__(self):
         super().__init__('imu_qos_bridge')
 
-        self.declare_parameter('input_topic', '/sensing/mavros_node/data_raw')
+        self.declare_parameter('input_topic', '/sensing/gnss/mavros_node/data_raw')
         self.declare_parameter('output_topic', '/sensing/imu/mavros_imu_raw')
 
         input_topic = self.get_parameter('input_topic').get_parameter_value().string_value

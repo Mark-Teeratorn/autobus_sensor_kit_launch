@@ -3,8 +3,18 @@
   <arg name="vehicle_mirror_param_file" default="$(find-pkg-share autobus_vehicle_description)/config/mirror.param.yaml" description="path to the file of vehicle mirror position yaml"/>
   <arg name="pointcloud_container_name" default="pointcloud_container"/>
   <arg name="vehicle_id" default="$(env VEHICLE_ID default)"/>
+  <arg name="vehicle_model" default="autobus_vehicle" description="vehicle model name"/>
+
+  <!-- Camera Driver OUTSIDE the main group to avoid vehicle_info global parameters -->
+  <include file="$(find-pkg-share autobus_sensor_kit_launch)/launch/camera.launch.xml">
+    <arg name="launch_driver" value="$(var launch_driver)" />
+  </include>
 
   <group>
+    <!-- load vehicle_info -->
+    <include file="$(find-pkg-share autoware_vehicle_info_utils)/launch/vehicle_info.launch.py">
+      <arg name="vehicle_info_param_file" value="$(find-pkg-share $(var vehicle_model)_description)/config/vehicle_info.param.yaml"/>
+    </include>
     <!-- LiDAR Driver -->
     <include file="$(find-pkg-share autobus_sensor_kit_launch)/launch/lidar.launch.xml">
       <arg name="launch_driver" value="$(var launch_driver)"/>
@@ -12,10 +22,6 @@
       <arg name="pointcloud_container_name" value="$(var pointcloud_container_name)"/>
     </include>
 
-    <!-- Camera Driver -->
-    <!-- <include file="$(find-pkg-share autobus_sensor_kit_launch)/launch/camera.launch.xml">
-      <arg name="launch_driver" value="$(var launch_driver)" />
-    </include> -->
 
     <!-- IMU Driver -->
     <include file="$(find-pkg-share autobus_sensor_kit_launch)/launch/imu.launch.xml">
