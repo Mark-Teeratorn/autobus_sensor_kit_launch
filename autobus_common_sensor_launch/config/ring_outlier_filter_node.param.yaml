@@ -2,13 +2,13 @@
   ros__parameters:
     distance_ratio: 1.03
     object_length_threshold: 0.1
-    max_rings_num: 128
-    max_points_num_per_ring: 4000
+    max_rings_num: 16           # ← VLP-16 has 16 rings
+    max_points_num_per_ring: 1800  # ← VLP-16 max points per ring
     publish_outlier_pointcloud: false
     min_azimuth_deg: 0.0
     max_azimuth_deg: 360.0
-    max_distance: 130.0
-    vertical_bins: 128
+    max_distance: 100.0         # ← VLP-16 max range
+    vertical_bins: 16           # ← match rings
     horizontal_bins: 36
     noise_threshold: 2
     processing_time_threshold_sec: 0.01

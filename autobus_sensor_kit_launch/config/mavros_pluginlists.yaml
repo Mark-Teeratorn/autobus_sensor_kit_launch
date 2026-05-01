@@ -1,0 +1,11 @@
+/**:
+  ros__parameters:
+    plugin_allowlist:
+      - imu
+      - imu_pub
+      - global_position
+      - local_position
+      - param
+      - command
+      - sys_status
+      - sys_time

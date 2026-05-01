@@ -1,0 +1,15 @@
+/**:
+  ros__parameters:
+    # IMU configuration
+    imu:
+      frame_id: "tamagawa/imu_link"
+      linear_acceleration_stdev: 0.0003
+      angular_velocity_stdev: 0.0003
+      orientation_stdev: 1.0
+      magnetic_field_stdev: 0.0000004
+    
+    # System ID
+    system_id: 1
+    component_id: 1
+    target_system_id: 1
+    target_component_id: 1
