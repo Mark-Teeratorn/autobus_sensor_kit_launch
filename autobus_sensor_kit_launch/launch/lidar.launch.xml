@@ -27,7 +27,8 @@
       </include>
     </group>
 
-    
+    <!-- Rear lidar disabled — only top lidar in use -->
+    <!--
     <group>
       <push-ros-namespace namespace="rear"/>
       <include file="$(find-pkg-share autobus_common_sensor_launch)/launch/velodyne_VLP16.launch.xml">
@@ -35,7 +36,7 @@
         <arg name="sensor_frame" value="velodyne_rear"/>
         <arg name="sensor_ip" value="192.168.1.202"/>
         <arg name="host_ip" value="$(var host_ip)"/>
-        <arg name="data_port" value="2369"/> <!-- use 2369 (different from top lidar 2368) to avoid port conflict -->
+        <arg name="data_port" value="2369"/>
         <arg name="scan_phase" value="0.0"/>
         <arg name="cloud_min_angle" value="0"/>
         <arg name="cloud_max_angle" value="360"/>
@@ -45,12 +46,22 @@
         <arg name="setup_sensor" value="false"/>
       </include>
     </group>
-  
+    -->
+
+    <!-- Single lidar relay: bypass concatenate_data, direct remap to expected topic -->
+    <node pkg="topic_tools" exec="relay" name="pointcloud_relay" output="screen"
+          args="/sensing/lidar/top/pointcloud_before_sync /sensing/lidar/concatenated/pointcloud"/>
+
+    <!-- Multi lidar preprocessor — disabled for single lidar, re-enable when adding rear -->
+    <!--
     <include file="$(find-pkg-share autobus_sensor_kit_launch)/launch/pointcloud_preprocessor.launch.py">
       <arg name="base_frame" value="base_link"/>
       <arg name="use_intra_process" value="true"/>
       <arg name="use_multithread" value="true"/>
+      <arg name="use_concat_filter" value="$(var use_concat_filter)"/>
       <arg name="pointcloud_container_name" value="$(var pointcloud_container_name)"/>
     </include>
+    -->
+
   </group>
 </launch>

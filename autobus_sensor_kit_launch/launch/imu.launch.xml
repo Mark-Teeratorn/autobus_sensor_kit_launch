@@ -1,18 +1,15 @@
-    <!-- IMU data comes from the shared GNSS mavros instance (gnss.launch.xml).
-         Do NOT launch a second mavros_node here — that causes serial port conflicts
-         and duplicate nodes fighting over FCU communication. -->
-
-  <!-- NOTE: mavros_node is intentionally NOT launched here.
-       A single mavros instance is shared between IMU and GNSS,
-       launched by gnss.launch.xml at /sensing/gnss/mavros -->
-
+<!-- IMU data comes from the shared GNSS mavros instance (gnss.launch.xml).
+     Do NOT launch a second mavros_node here — that causes serial port conflicts
+     and duplicate nodes fighting over FCU communication. -->
+<!-- NOTE: mavros_node is intentionally NOT launched here.
+     A single mavros instance is shared between IMU and GNSS,
+     launched by gnss.launch.xml at /sensing/gnss/mavros -->
 <launch>
   <arg name="launch_driver" default="true"/>
   <group>
     <push-ros-namespace namespace="imu"/>
-
     <arg name="imu_raw_name"          default="/sensing/gnss/imu/data"/>
-    <arg name="imu_bridged_name"      default="/sensing/imu/imu_data"/>
+    <arg name="imu_bridged_name"      default="/sensing/imu/imu_raw_reliable"/>
     <arg name="imu_corrector_param_file" default="$(find-pkg-share individual_params)/config/$(var vehicle_id)/autobus_sensor_kit/imu_corrector.param.yaml"/>
 
     <node pkg="autobus_sensor_kit_launch" exec="imu_qos_bridge.py" name="imu_qos_bridge" output="screen">
