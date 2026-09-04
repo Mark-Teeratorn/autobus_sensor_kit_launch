@@ -50,7 +50,7 @@
 
     <!-- Single lidar relay: bypass concatenate_data, direct remap to expected topic -->
     <node pkg="topic_tools" exec="relay" name="pointcloud_relay" output="screen"
-          args="/sensing/lidar/top/pointcloud_before_sync /sensing/lidar/concatenated/pointcloud"/>
+          args="/sensing/lidar/top/mirror_cropped/pointcloud_ex /sensing/lidar/concatenated/pointcloud"/>
 
     <!-- Multi lidar preprocessor — disabled for single lidar, re-enable when adding rear -->
     <!--
