@@ -1,5 +1,13 @@
 /**:
   ros__parameters:
+    # Whitelist only essential plugins for GNSS/IMU/Commands
+    plugin_allowlist:
+      - "sys_status"
+      - "sys_time"
+      - "global_position"
+      - "imu"
+      - "command"
+
     # IMU configuration
     imu:
       frame_id: "tamagawa/imu_link"
@@ -13,3 +21,6 @@
     component_id: 1
     target_system_id: 1
     target_component_id: 1
+
+
+
